@@ -26,26 +26,22 @@ function oldScrabbleScorer(word) {
 
       }
    }
+   // this function only returns letter points when called through scorerPrompt and scoringAlgorithms when I add the console.log. It does return letter points when I call it directly?
    console.log(letterPoints);
    return letterPoints;
 }
-// this function only returns letter points when called through scorerPrompt and scoringAlgorithms when I add the console.log
+
 
 // your job is to finish writing these functions and variables that we've named //
 // don't change the names or your program won't work as expected. //
 
 function initialPrompt() {
    let promptWord = input.question("Let's play some scrabble! Enter a word: ");
-   let promptScorer = input.question(`Which scoring algorithm would you like to use?
-
-   0 - Simple: One point per character
-   1 - Vowel Bonus: Vowels are worth 3 points
-   2 - Scrabble: Uses scrabble point system
-   Enter 0, 1, or 2: `)
-   return [promptWord, promptScorer];
+   
+   return promptWord;
 };
 
-let newPointStructure;
+let newPointStructure = transform(oldPointStructure);
 
 let simpleScorer = function (word) {
    word = word.toUpperCase();
@@ -74,7 +70,34 @@ let vowelBonusScorer = function (word) {
    return letterPoints;
 }
 
-let scrabbleScorer;
+let scrabbleScorer = function(word) {
+word = word.toLowerCase();
+let letterPoints = 0;
+const newPointStructureObj = newPointStructure;
+
+for (let i = 0; i < word.length; i++) {
+   let letter = word[i];
+   if (letter in newPointStructureObj) {
+      letterPoints += newPointStructureObj[letter];
+   }
+}
+console.log(`Score for ${word}: ${letterPoints}`);
+return letterPoints;
+}
+
+
+// copypasta
+// for (let i = 0; i < word.length; i++) {
+
+//    for (const pointValue in oldPointStructure) {
+
+//       if (oldPointStructure[pointValue].includes(word[i])) {
+//          letterPoints += `Score for '${word[i].toLowerCase()}': ${pointValue}\n`
+//       }
+
+//    }
+// }
+// copypasta
 
 const scoringAlgorithms = [
    {
@@ -95,26 +118,43 @@ const scoringAlgorithms = [
 ];
 
 
-function scorerPrompt(word, scorer) {
-     scorer = Number(scorer);
+function scorerPrompt(word) {
+   let promptScorer = input.question(`Which scoring algorithm would you like to use?
+   
+      0 - Simple: One point per character
+      1 - Vowel Bonus: Vowels are worth 3 points
+      2 - Scrabble: Uses scrabble point system
+      Enter 0, 1, or 2: `)
 
-   if (scorer === 0) {
+     promptScorer = Number(promptScorer);
+
+   if (promptScorer === 0) {
       scoringAlgorithms[0].scorerFunction(word);
-   } else if (scorer === 1) {
+   } else if (promptScorer === 1) {
       scoringAlgorithms[1].scorerFunction(word);
-   } else if (scorer === 2) {
+   } else if (promptScorer === 2) {
       scoringAlgorithms[2].scorerFunction(word);
    } else {
       console.log(`Invalid scorer choice. Please run program again.`)
    }
+   return promptScorer;
  }
 
-function transform() { };
+function transform(obj) { 
+   let newObject = {};
+  for (let pointValue in obj) {
+    let letters = obj[pointValue];
+    for (let i = 0; i < letters.length; i++) {
+      newObject[letters[i].toLowerCase()] = Number(pointValue);
+    }
+  }
+  return newObject;
+};
 
 function runProgram() {
-   let [word, scorer] = initialPrompt();
-   scorerPrompt(word,scorer);
-
+   let word = initialPrompt();
+   scorerPrompt(word);
+  
 }
 
 
