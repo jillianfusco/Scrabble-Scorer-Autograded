@@ -85,20 +85,6 @@ console.log(`Score for ${word}: ${letterPoints}`);
 return letterPoints;
 }
 
-
-// copypasta
-// for (let i = 0; i < word.length; i++) {
-
-//    for (const pointValue in oldPointStructure) {
-
-//       if (oldPointStructure[pointValue].includes(word[i])) {
-//          letterPoints += `Score for '${word[i].toLowerCase()}': ${pointValue}\n`
-//       }
-
-//    }
-// }
-// copypasta
-
 const scoringAlgorithms = [
    {
       name: "Simple Score",
@@ -113,7 +99,7 @@ const scoringAlgorithms = [
    {
       name: "Scrabble",
       description: "The traditional scoring algorithm.",
-      scorerFunction: oldScrabbleScorer
+      scorerFunction: scrabbleScorer
    }
 ];
 
